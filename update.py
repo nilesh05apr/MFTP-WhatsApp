@@ -70,7 +70,7 @@ def check_notices(session, sessionData):
         if a.attrs['title'] == 'Download':
             notice['attachment_url'] = ERP_ATTACHMENT_URL.format(year, id_)
             r = session.get(notice['attachment_url'], stream=True)
-            print(r.headers)
+            #print(r.headers)
             r.raw.decode_content = True
             hash_ = hashlib.md5()
             notice['attachment_raw'] = b""
