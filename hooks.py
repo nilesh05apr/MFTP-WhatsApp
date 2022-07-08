@@ -2,7 +2,7 @@ from os import environ as env
 import requests
 import time
 import settings
-
+from os import environ as env
 from erp import req_args
 
 if 'NOTICES_EMAIL_ADDRESS' not in env:
@@ -33,15 +33,25 @@ def notices_updated(notices):
             filename = "attachment.pdf"
             files = [('attachment', (filename, notice['attachment_raw']))]
 
-        r = requests.post(
-            'https://api.mailgun.net/v3/%s/messages' % env['MAILGUN_DOMAIN'],
-            auth=('api', env['MAILGUN_API_KEY']),
+        # r = requests.post(
+        #     'https://api.mailgun.net/v3/%s/messages' % env['MAILGUN_DOMAIN'],
+        #     auth=('api', env['MAILGUN_API_KEY']),
+            # data={
+            #     'from': 'MFTP <no-reply@%s>' % env['MAILGUN_DOMAIN'],
+            #     'to': [env['NOTICES_EMAIL_ADDRESS']],
+            #     'subject': message['subject'].encode("utf-8"),
+            #     'html': message['html'].encode("utf-8")
+            # }, files=files, verify=False)
+
             data={
                 'from': 'MFTP <no-reply@%s>' % env['MAILGUN_DOMAIN'],
                 'to': [env['NOTICES_EMAIL_ADDRESS']],
                 'subject': message['subject'].encode("utf-8"),
                 'html': message['html'].encode("utf-8")
-            }, files=files, verify=False)
+            }
+        r = requests.post(env['SEND_MESSAGE_URL'],data={
+            "message":data
+        },verify=False)
 
         # r = requests.post('https://api.sendgrid.com/api/mail.send.json',
         # data=message)
