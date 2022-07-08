@@ -1,6 +1,6 @@
 from os import environ as env
 import requests
-
+import time
 import settings
 
 from erp import req_args
@@ -14,6 +14,8 @@ def make_text(company):
     text = '%s: %s (%s - %s)' % (company['name'], company['job'],
                                  company['start_date'], company['end_date'])
     return text
+
+
 
 
 def notices_updated(notices):
@@ -43,4 +45,4 @@ def notices_updated(notices):
 
         # r = requests.post('https://api.sendgrid.com/api/mail.send.json',
         # data=message)
-        print 'Sent notice to', message['to'], ':', message['subject'], r.text
+        print ('Sent notice to', message['to'], ':', message['subject'], r.text)
