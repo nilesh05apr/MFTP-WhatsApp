@@ -23,6 +23,7 @@ req_args = {
 }
 
 
+
 class WrongPasswordError(Exception):
     """
     Error which is raised when there no secret question is fetched due to wrong password or other reasons.

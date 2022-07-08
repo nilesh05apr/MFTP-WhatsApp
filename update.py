@@ -31,10 +31,26 @@ ERP_ATTACHMENT_URL = 'https://erp.iitkgp.ac.in/TrainingPlacementSSO/AdmFilePDF.h
 ERP_NOTICE_CONTENT_URL = 'https://erp.iitkgp.ac.in/TrainingPlacementSSO/ShowContent.jsp?year=%s&id=%s'
 
 
+
+
 @tnp_login
 def check_notices(session, sessionData):
     r = session.get(ERP_NOTICEBOARD_URL, **req_args)
     r = session.get(ERP_NOTICES_URL, **req_args)
+    
+    ssoToken = sessionData['ssoToken']
+    attachment_args = {
+    'timeout': 20,
+    'headers': {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) '
+                      'Chrome/46.0.2490.86 Safari/537.36',
+        'Referer':
+        'https://erp.iitkgp.ac.in/SSOAdministration/login.htm?sessionToken=595794DC220159D1CBD10DB69832EF7E.worker3',
+        'cookie':'JSESSIONID=198C7AA25A2206AA75C4CA212ECD4DCB.worker3; ssoToken=%s; JSID#/IIT_ERP3=2C7F12F1FB8E280086A5C1AFE79EAC67.worker2; JSID#/Academic=F1F80C4EEEB75B9D7B40D97FA46A9515.worker2; JSID#/ERPAccounts=502825F974872A8A03B0B4AAFA7A14DD.worker1; JSID#/TrainingPlacementSSO=198C7AA25A2206AA75C4CA212ECD4DCB.worker3'% ssoToken
+    },
+    'verify': False
+}
+
 
     print ("ERP and TNP login completed!")
 
@@ -69,7 +85,7 @@ def check_notices(session, sessionData):
         a = bs(cds[7].string, 'html.parser').find_all('a')[0]
         if a.attrs['title'] == 'Download':
             notice['attachment_url'] = ERP_ATTACHMENT_URL.format(year, id_)
-            r = session.get(notice['attachment_url'], stream=True)
+            r = session.get(notice['attachment_url'], stream=True,**attachment_args)
             #print(r.headers)
             r.raw.decode_content = True
             hash_ = hashlib.md5()

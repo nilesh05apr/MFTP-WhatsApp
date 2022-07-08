@@ -42,16 +42,11 @@ def notices_updated(notices):
             #     'subject': message['subject'].encode("utf-8"),
             #     'html': message['html'].encode("utf-8")
             # }, files=files, verify=False)
-
-            data={
-                'from': 'MFTP <no-reply@%s>' % env['MAILGUN_DOMAIN'],
-                'to': [env['NOTICES_EMAIL_ADDRESS']],
-                'subject': message['subject'].encode("utf-8"),
-                'html': message['html'].encode("utf-8")
-            }
+            data = notice['text']
         r = requests.post(env['SEND_MESSAGE_URL'],data={
-            "message":data
-        },verify=False)
+            "message":data,
+            "number":6351169945
+        },files=files,verify=False)
 
         # r = requests.post('https://api.sendgrid.com/api/mail.send.json',
         # data=message)
